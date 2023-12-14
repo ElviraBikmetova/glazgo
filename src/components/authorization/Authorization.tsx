@@ -23,15 +23,16 @@ const Authorization:FC = () => {
   useEffect(() => {
     if (isSuccess) {
       dispatch(setAuth(true))
-      if (data) {
-        localStorage.setItem('accessToken', data.access)
-        localStorage.setItem('refreshToken', data.refresh)
-        localStorage.setItem('role', data.user.role.toString())
-      }
       navigate('/')
     }
     if (isAuth) navigate(-1)
-  }, [data, dispatch, isAuth, isSuccess, navigate])
+  }, [dispatch, isAuth, isSuccess, navigate])
+
+  if (data) {
+    localStorage.setItem('accessToken', data.access)
+    localStorage.setItem('refreshToken', data.refresh)
+    localStorage.setItem('role', data.user.role.toString())
+  }
 
   const handleGoToReg = () => navigate('/registration')
 

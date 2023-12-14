@@ -16,12 +16,15 @@ const Registration:FC = () => {
 
   useEffect(() => {
     if (data) {
-      localStorage.setItem('accessToken', data.access)
-      localStorage.setItem('refreshToken', data.access)
-      localStorage.setItem('role', data.user.role.toString())
       dispatch(setAuth(true))
     }
-  }, [data])
+  }, [data, dispatch])
+
+  if (data) {
+    localStorage.setItem('accessToken', data.access)
+    localStorage.setItem('refreshToken', data.access)
+    localStorage.setItem('role', data.user.role.toString())
+  }
 
   const navigate = useNavigate()
 
