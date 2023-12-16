@@ -2,21 +2,21 @@ import { FC, useEffect } from 'react'
 import * as C from '../../styles/components'
 import * as S from './AuthorizationStyles'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { IAuthData } from '../../modules/IAuth'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
 import { setAuth } from '../../store/redusers/authSlice'
 import authApi from '../../services/AuthService'
 import Logo from '../../images/icons/logo.svg'
+import { IRegQueryData } from '../../modules/IReg'
 
 const Authorization:FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const [login, { data, error, isSuccess }] = authApi.useLoginMutation()
+  const [login, { data: regData, error, isSuccess }] = authApi.useLoginMutation()
   const isAuth = useAppSelector(state => state.auth.isAuth)
 
-  const onSubmit: SubmitHandler<IAuthData> = async (data) => {
-    await login(data)
+  const onSubmit: SubmitHandler<IRegQueryData> = async (formData) => {
+    await login(formData)
     reset()
   }
 
@@ -28,10 +28,10 @@ const Authorization:FC = () => {
     if (isAuth) navigate(-1)
   }, [dispatch, isAuth, isSuccess, navigate])
 
-  if (data) {
-    localStorage.setItem('accessToken', data.access)
-    localStorage.setItem('refreshToken', data.refresh)
-    localStorage.setItem('role', data.user.role.toString())
+  if (regData) {
+    localStorage.setItem('accessToken', regData.accessToken)
+    // localStorage.setItem('refreshToken', data.refreshToken)
+    // localStorage.setItem('role', data.user.role.toString())
   }
 
   const handleGoToReg = () => navigate('/registration')
@@ -41,7 +41,7 @@ const Authorization:FC = () => {
     formState: { errors, isValid},
     handleSubmit,
     reset
-  } = useForm<IAuthData>({mode: 'onBlur'})
+  } = useForm<IRegQueryData>({mode: 'onBlur'})
 
   return (
     <div>
@@ -53,15 +53,18 @@ const Authorization:FC = () => {
         <div onClick={handleGoToReg}>Зарегистрироваться</div>
       </S.Title>
       <S.Form onSubmit={handleSubmit(onSubmit)}>
-        <S.Label htmlFor="username">Логин</S.Label>
+        {/* <S.Label htmlFor="username">Логин</S.Label>
         <S.Input id='username' {...register('username', {required: 'Поле обязательно к заполнению'})}/>
-        {errors?.username && <S.Error>{errors?.username?.message}</S.Error>}
-        <S.Label htmlFor="username">Email</S.Label>
+        {errors?.username && <S.Error>{errors?.username?.message}</S.Error>} */}
+
+        <S.Label htmlFor="email">Email</S.Label>
         <S.Input id='email' {...register('email', {required: 'Поле обязательно к заполнению'})}/>
         {errors?.email && <S.Error>{errors?.email?.message}</S.Error>}
+
         <S.Label htmlFor="password">Пароль</S.Label>
         <S.Input id='password' type="password" {...register('password', {required: 'Поле обязательно к заполнению'})} />
         {(errors?.password || error) && <S.Error>{errors?.password?.message || 'Неверные данные'}</S.Error>}
+
         <S.CFButton disabled={!isValid}>Продолжить</S.CFButton>
       </S.Form>
     </div>

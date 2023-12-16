@@ -1,6 +1,5 @@
 import Authorization from "./components/authorization/Authorization";
 import { Route, Routes } from "react-router-dom";
-import Chat from "./components/chat/Chat";
 import Vacancies from "./components/vacancies/Vacancies";
 import NotFound from "./components/NotFound";
 import Zayavka from "./components/zayavka/Zayavka";
@@ -19,35 +18,20 @@ import { setAuth } from "./store/redusers/authSlice";
 import { ERoutes } from "./enums/routes";
 import { PrivateRoutes } from "./components/PrivateRoutes";
 import CandidatesAll from "./components/candidates/CandidatesAll";
-import { IToken } from "./modules/IToken";
+import { skipToken } from "@reduxjs/toolkit/dist/query/react";
 
 const App: FC = () => {
-  const [verify, {error, isLoading}] = authApi.useVerifyMutation()
-  const [refresh] = authApi.useRefreshMutation()
   const dispatch = useAppDispatch()
+  const isAuth = useAppSelector(state => state.auth.isAuth)
+  const [skip, setSkip] = useState(true)
+  authApi.useRefreshQuery(null, {skip})
 
   useEffect(() => {
     if (localStorage.getItem('accessToken')) {
-      const token = localStorage.getItem('accessToken')
-      const queryBody: IToken = { token }
-      verify(queryBody)
       dispatch(setAuth(true))
-      // refresh(queryBody)
+      setSkip(false)
     }
-    // if (localStorage.getItem('refreshToken')) {
-    //   const token = localStorage.getItem('refreshToken')
-    //   const queryBody: IToken = { token: token}
-    //   refresh(queryBody)
-    // }
   }, [])
-
-  const [isPageRefresh, setIsPageRefresh] = useState(true)
-  const isAuth = useAppSelector(state => state.auth.isAuth)
-
-
-  // if (isAuth) setIsPageRefresh(false)
-  // if (isPageRefresh) <div>Loading...</div>
-  // if (isLoading) <div>Loading...</div>
 
   return (
     <Routes>
@@ -63,7 +47,6 @@ const App: FC = () => {
           <Route path={ERoutes.Candidates} element={<Candidates/>}/>
           <Route path={ERoutes.Candidate} element={<Candidate/>}/>
           <Route path={ERoutes.NewCandidate} element={<NewCandidate/>}/>
-          <Route path={ERoutes.Chat} element={<Chat/>}/>
           <Route path={ERoutes.VacancyClosed} element={<VacancyClosed/>}/>
         </Route>
         <Route path="*" element={<NotFound />} />

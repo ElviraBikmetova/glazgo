@@ -1,21 +1,19 @@
-import { IAuthData } from '../modules/IAuth'
 import { IRegQueryData, IRegResponseData } from '../modules/IReg'
-import decamelizeKeys from 'decamelize-keys'
+import { IUser } from '../modules/IUser'
 import baseApi from './BaseApi'
-import { IToken } from '../modules/IToken'
 
 const authApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
         registration: build.mutation<IRegResponseData, IRegQueryData>({
             query: (regData) => ({
-                url: '/user/reg/',
+                url: '/api/registration',
                 method: 'POST',
-                body: JSON.stringify(decamelizeKeys(regData))
+                body: JSON.stringify(regData)
             })
         }),
-        login: build.mutation<IRegResponseData, IAuthData>({
+        login: build.mutation<IRegResponseData, IRegQueryData>({
             query: (authData) => ({
-                url: '/user/login/',
+                url: '/api/login',
                 method: 'POST',
                 body: JSON.stringify(authData)
             }),
@@ -23,25 +21,19 @@ const authApi = baseApi.injectEndpoints({
         }),
         logout: build.mutation({
             query: () => ({
-                url: '/user/logout/',
+                url: '/api/logout',
                 method: 'POST',
-                // credentials: 'include'
             })
         }),
-        verify: build.mutation<IToken, IToken>({
-            query: (token) => ({
-                url: '/user/token/verify/',
-                method: 'POST',
-                body: JSON.stringify(decamelizeKeys(token))
-                // credentials: 'include'
+        refresh: build.query<IRegResponseData, null>({
+            query: () => ({
+                url: '/api/refresh',
+                headers: {}
             })
         }),
-        refresh: build.mutation({
-            query: (token) => ({
-                url: '/user/token/refresh/',
-                method: 'POST',
-                body: JSON.stringify(decamelizeKeys(token))
-                // credentials: 'include'
+        getUsers: build.query<IUser[], null>({
+            query: () => ({
+                url: '/api/users',
             })
         })
     })

@@ -21,9 +21,9 @@ const Registration:FC = () => {
   }, [data, dispatch])
 
   if (data) {
-    localStorage.setItem('accessToken', data.access)
-    localStorage.setItem('refreshToken', data.access)
-    localStorage.setItem('role', data.user.role.toString())
+    localStorage.setItem('accessToken', data.accessToken)
+    // localStorage.setItem('refreshToken', data.refreshToken)
+    // localStorage.setItem('role', data.user.role.toString())
   }
 
   const navigate = useNavigate()
@@ -54,19 +54,19 @@ const Registration:FC = () => {
             <div onClick={handleGoToAuth}>Войти</div>
       </S.Title>
       <S.Form onSubmit={handleSubmit(onSubmit)}>
-        <S.Label htmlFor="firstName">Имя</S.Label>
+        {/* <S.Label htmlFor="firstName">Имя</S.Label>
         <S.Input id='firstName' {...register('firstName', {required: 'Поле обязательно к заполнению'})}/>
         {errors?.firstName && <p>{errors?.firstName?.message}</p>}
 
         <S.Label htmlFor="nalastNameme">Фамилия</S.Label>
         <S.Input id='lastName' {...register('lastName', {required: 'Поле обязательно к заполнению'})}/>
-        {errors?.lastName && <p>{errors?.lastName?.message}</p>}
+        {errors?.lastName && <p>{errors?.lastName?.message}</p>} */}
 
         <S.Label htmlFor="email">Email</S.Label>
         <S.Input id='email' {...register('email', {required: 'Поле обязательно к заполнению'})}/>
         {errors?.email && <p>{errors?.email?.message}</p>}
 
-        <S.Label htmlFor="phone">Телефон</S.Label>
+        {/* <S.Label htmlFor="phone">Телефон</S.Label>
         <S.Input id='phone' {...register('phone', {required: 'Поле обязательно к заполнению'})}/>
         {errors?.phone && <p>{errors?.phone?.message}</p>}
 
@@ -81,19 +81,16 @@ const Registration:FC = () => {
 
         <S.Label htmlFor="username">Придумайте логин</S.Label>
         <S.Input id='username' {...register('username', {required: 'Поле обязательно к заполнению'})}/>
-        {errors?.username && <p>{errors?.username?.message}</p>}
+        {errors?.username && <p>{errors?.username?.message}</p>} */}
 
         <S.Label htmlFor="password1">Придумайте пароль</S.Label>
-        <S.Input id='password1' type="password" {...register('password1', {required: 'Поле обязательно к заполнению'})} />
-        {(errors?.password1 || error) && <p>{errors?.password1?.message || 'Ошибка от апи'}</p>}
+        <S.Input id='password' type="password" {...register('password', {required: 'Поле обязательно к заполнению'})} />
+        {(errors?.password || error) && <p>{errors?.password?.message || 'Ошибка от апи'}</p>}
 
-        <S.Label htmlFor="password2">Повторите пароль</S.Label>
+        {/* <S.Label htmlFor="password2">Повторите пароль</S.Label>
         <S.Input id='password2' type="password" {...register('password2', {required: 'Поле обязательно к заполнению'})} />
-        {(errors?.password2 || error) && <p>{errors?.password2?.message || 'Ошибка от апи'}</p>}
+        {(errors?.password2 || error) && <p>{errors?.password2?.message || 'Ошибка от апи'}</p>} */}
 
-        <S.Label htmlFor="referralToken">Реферальная ссылка</S.Label>
-        <S.Input id='referralToken' {...register('referralToken', {required: 'Поле обязательно к заполнению'})} />
-        {(errors?.referralToken || error) && <p>{errors?.referralToken?.message || 'Ошибка от апи'}</p>}
         <C.FButton disabled={!isValid}>Продолжить</C.FButton>
       </S.Form>
     </div>

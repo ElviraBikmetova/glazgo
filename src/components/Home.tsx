@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Welcome from '../images/welcome.svg'
 import Vacancies from '../images/icons/vacancies.svg'
 import Candidates from '../images/icons/candidates.svg'
@@ -6,13 +6,24 @@ import Projects from '../images/icons/projects.svg'
 import Profile from '../images/icons/profile.svg'
 import { styled } from 'styled-components'
 import { Link } from 'react-router-dom'
+import authApi from '../services/AuthService'
 
 const Home = () => {
+  const [skip, setSkip] = useState(true)
+  const {data: users, refetch} = authApi.useGetUsersQuery(null, {skip})
+
+  const getUsers = () => {
+    setSkip(false)
+    if (!skip) refetch()
+  }
+
   return (
     <Wrapper>
       <SWelcome>
         <Welcome/>
       </SWelcome>
+      <button onClick={getUsers}>Получить пользователей</button>
+      {users && users.map((user) => <div key={user.email}>{user.email}</div>)}
       <Board>
         <Link to='/vacancies'>
           <BoardItem>

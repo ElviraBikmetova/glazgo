@@ -10,6 +10,7 @@
     "@types/react-dom": "^18.2.14",
     "@types/react-router-dom": "^5.3.3",
     "@types/styled-components": "^5.1.29",
+    "async-mutex": "^0.4.0",
     "camelcase-keys": "^9.1.2",
     "decamelize-keys": "^2.0.1",
     "react": "^18.2.0",

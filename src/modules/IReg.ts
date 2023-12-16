@@ -1,12 +1,11 @@
 import { IUser } from "./IUser"
 
 export interface IRegQueryData extends IUser {
-    password1: string
-    password2: string
-    referralToken?: string
+    email: string
+    password: string
 }
 export interface IRegResponseData {
-    access: string
-    refresh: string
+    accessToken: string
+    refreshToken: string
     user: IUser
 }
