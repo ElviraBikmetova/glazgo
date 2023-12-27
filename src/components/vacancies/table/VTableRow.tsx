@@ -2,20 +2,20 @@ import React, { FC, useState } from 'react'
 import styled from 'styled-components'
 import { IVacancy } from '../../../modules/IVacancy'
 import { useNavigate } from 'react-router-dom'
-import { REGION, VACANCY_STATUS } from '../../../config'
+import { VACANCY_STATUS } from '../../../config'
 
 interface VacancyItemProps {
     vacancy: IVacancy
 }
 
 const VTableRow: FC<VacancyItemProps> = ({vacancy}) => {
-    const {nameVacancy, statusVacancy, region, salary, id} = vacancy
+    const {name, status, city, salary, _id} = vacancy
     const [showFullContent, setShowFullContent] = useState(false)
     const navigate = useNavigate()
 
     const handleGoToVacancy = () => {
         if (showFullContent) {
-            navigate(`/vacancies/${id}`)
+            navigate(`/vacancies/${_id}`)
         } else {
             // Показать содержимое ячейки полностью
             setShowFullContent(true);
@@ -24,10 +24,10 @@ const VTableRow: FC<VacancyItemProps> = ({vacancy}) => {
 
     return (
         <tr>
-            <Td data-content={id}>{id}</Td>
-            <Td data-content={nameVacancy} onClick={handleGoToVacancy}>{nameVacancy}</Td>
-            <Td data-content={VACANCY_STATUS[statusVacancy]}>{VACANCY_STATUS[statusVacancy]}</Td>
-            <Td data-content={REGION[region]}>{REGION[region]}</Td>
+            <Td data-content={_id}>{_id}</Td>
+            <Td data-content={name} onClick={handleGoToVacancy}>{name}</Td>
+            {status && <Td data-content={VACANCY_STATUS[status]}>{VACANCY_STATUS[status]}</Td>}
+            <Td data-content={city}>{city}</Td>
             <Td data-content={salary}>{salary}</Td>
         </tr>
     )

@@ -2,25 +2,27 @@ import { IPagination } from "./IPagination"
 import { IUser } from "./IUser"
 
 export interface IVacancy {
-    nameVacancy: string
-    reason: number
-    statusVacancy: number
-    region: number
+    name: string
+    status?: string
+    city: string
     salary: number
-    id: number
-    dateCust: string
-    customer: IUser
-    recruter: IUser
+    schedule: string
+    reason: string
+    _id: string
+    // statusVacancy: number
+    // dateCust: string
+    // customer: IUser
+    // recruter: IUser
 }
 
-export interface IVacancyChangeQueryData extends IVacancy {
-    project: number
-    schedule: number
-    cause: number
-    link: string
-    candidate: number
-    statusVacancy: number
-}
+// export interface IVacancyChangeQueryData extends IVacancy {
+//     project: number
+//     schedule: number
+//     cause: number
+//     link: string
+//     candidate: number
+//     statusVacancy: number
+// }
 
 export interface IVacancyResponseData extends IPagination {
     results: IVacancy[]

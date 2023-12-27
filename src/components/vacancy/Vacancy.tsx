@@ -4,22 +4,23 @@ import * as C from '../../styles/components'
 import Close from '../../images/icons/close.svg'
 import { useNavigate, useParams } from 'react-router-dom'
 import vacancyApi from '../../services/VacancyService'
-import { REASON, REGION, SCHEDULE, VACANCY_STATUS } from '../../config'
+import { REASON, SCHEDULE, VACANCY_STATUS } from '../../config'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { IVacancyChangeQueryData } from '../../modules/IVacancy'
+import { IVacancy } from '../../modules/IVacancy'
 import candidateApi from '../../services/CandidateService'
 import { formatDate } from '../../utils'
 
 const Vacancy: FC = () => {
     const {id} = useParams()
     const {data: vacancy} = vacancyApi.useFetchVacancyQuery(id ? id : '')
+    const [updateVacancy] = vacancyApi.useUpdateVacancyMutation()
     const navigate = useNavigate()
-    let status: number | undefined, customer, recruiter, date
+    let status: string | undefined, customer, recruiter, date
     if (vacancy) {
-        status = vacancy.statusVacancy
-        customer = vacancy.customer
-        recruiter = vacancy.recruter
-        date = formatDate(vacancy.dateCust)
+        status = vacancy.status
+        // customer = vacancy.customer
+        // recruiter = vacancy.recruter
+        // date = formatDate(vacancy.dateCust)
     }
 
     const {data} = candidateApi.useFetchVacancyCandidatesQuery({id: id ? id : '', params: ''})
@@ -37,24 +38,28 @@ const Vacancy: FC = () => {
         formState: { errors, isValid},
         handleSubmit,
         reset
-    } = useForm<IVacancyChangeQueryData>({
+    } = useForm<IVacancy>({
         mode: 'onBlur',
         defaultValues: {
             salary: vacancy?.salary,
-            statusVacancy: status,
+            status,
         }
     })
 
     useEffect(() => {
         reset({
+          city: vacancy?.city,
           salary: vacancy?.salary,
-          statusVacancy: status,
+          schedule: vacancy?.schedule,
+          reason: vacancy?.reason,
+          status,
         });
       }, [reset, vacancy, status]);
 
-    const onSubmit: SubmitHandler<IVacancyChangeQueryData> = async (data) => {
+    const onSubmit: SubmitHandler<IVacancy> = async (vacancy) => {
     // await login(data)
         setIsChange(!isChange)
+        updateVacancy({vacancy, id})
     }
 
     const [isChange, setIsChange] = useState(false)
@@ -81,7 +86,7 @@ const Vacancy: FC = () => {
                         <C.SvgIconWrapper><Close/></C.SvgIconWrapper>
                     </C.NButton>
                 </S.Title>
-                <S.VacancyName>{vacancy?.nameVacancy}</S.VacancyName>
+                <S.VacancyName>{vacancy?.name}</S.VacancyName>
             </div>
             <S.Head>
                 <div>
@@ -94,15 +99,13 @@ const Vacancy: FC = () => {
                 </div>
             </S.Head>
             <S.Info>
-                {customer?.firstName &&
                     <S.AutoItem>
                         <p>Заказчик:</p>
-                        <p>{customer?.lastName} {customer?.firstName}</p>
+                        <p></p>
                     </S.AutoItem>
-                }
                 <S.AutoItem>
                     <p>Рекрутер:</p>
-                    <p>{recruiter?.lastName} {recruiter?.firstName}</p>
+                    <p></p>
                 </S.AutoItem>
                 {/* <S.AutoItem>
                     <p>Компания:</p>
@@ -110,54 +113,48 @@ const Vacancy: FC = () => {
                 </S.AutoItem> */}
             </S.Info>
             <S.Form onSubmit={handleSubmit(onSubmit)}>
-                {/* <label htmlFor="project">Проект</label>
-                <S.Select id="project" disabled={!isChange} {...register('project')}>
-                    <option value="0"></option>
-                    <option value="1">Проект 1</option>
-                    <option value="2">Проект 2</option>
-                    <option value="3">Проект 3</option>
-                </S.Select> */}
-                <label htmlFor="region">Город</label>
-                <S.Select id="region" disabled={!isChange} {...register('region')}>
-                    {Object.keys(REGION).map((key) => (
-                        <option value={key} key={key}>{REGION[parseInt(key)]}</option>
-                    ))}
-                </S.Select>
+                <label htmlFor="city">Город</label>
+                <S.Input id="city" disabled={!isChange} {...register('city')}/>
+
                 <label htmlFor="salary">Зарплата</label>
                 <S.Input id="salary" type="number" disabled={!isChange} {...register('salary')}/>
+
                 <label htmlFor="schedule">График</label>
                 <S.Select id="schedule" disabled={!isChange} {...register('schedule')}>
                     {Object.keys(SCHEDULE).map((key) => (
-                        <option value={key} key={key}>{SCHEDULE[parseInt(key)]}</option>
+                        <option value={key} key={key}>{SCHEDULE[key]}</option>
                     ))}
                 </S.Select>
+
                 <label htmlFor="reason">Причина открытия вакансии</label>
                 <S.Select id="reason" disabled={!isChange} {...register('reason')}>
                     {Object.keys(REASON).map((key) => (
-                        <option value={key} key={key}>{REASON[parseInt(key)]}</option>
+                        <option value={key} key={key}>{REASON[key]}</option>
                     ))}
                 </S.Select>
-                {/* <label htmlFor="link">Ссылка на вакансию</label>
-                <S.Input id="link" disabled={!isChange} {...register('link')}/> */}
+
                 <label htmlFor="candidate">Выбранный кандидат</label>
-                <S.Select id="candidate" disabled={!isChange} {...register('candidate')}>
+                {/* <S.Select id="candidate" disabled={!isChange} {...register('candidate')}>
                     <option value="0"></option>
                     {candidates && candidates.map((candidate) => (
                         <option value={candidate.candidatId.id} key={candidate.candidatId.id}>{candidate.candidatId.surname} {candidate.candidatId.name} {candidate.candidatId.otch}</option>
                     ))}
-                </S.Select>
-                <label htmlFor="statusVacancy">Статус</label>
-                <S.Select id="statusVacancy" disabled={!isChange} {...register('statusVacancy')}>
+                </S.Select> */}
+
+                <label htmlFor="status">Статус</label>
+                <S.Select id="status" disabled={!isChange} {...register('status')}>
                     {Object.keys(VACANCY_STATUS).map((key) => (
-                        <option value={key} key={key}>{VACANCY_STATUS[parseInt(key)]}</option>
+                        <option value={key} key={key}>{VACANCY_STATUS[key]}</option>
                     ))}
                 </S.Select>
+
                 {isChange &&
                 <S.FormButtons>
                     <C.FButton>Сохранить</C.FButton>
                     <C.FButton type="reset" onClick={handleCancel}>Отменить</C.FButton>
                 </S.FormButtons>}
             </S.Form>
+
             <S.Buttons>
                 {!isChange && <C.FButton onClick={handleChange}>Изменить вакансию</C.FButton>}
                 <C.FButton onClick={handleCloseVacancy}>Закрыть вакансию</C.FButton>

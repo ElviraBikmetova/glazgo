@@ -9,21 +9,21 @@ import { setPaginationData } from '../../../store/redusers/paginationSlice'
 const VTable: FC = () => {
     const dispatch = useAppDispatch()
     const params = useAppSelector(state => state.pagination.params)
-    const {data} = vacancyApi.useFetchVacanciesQuery(params ? params : '')
-    const vacancies = data?.results
+    const {data: vacancies} = vacancyApi.useFetchAllVacanciesQuery()
+    // const {data} = vacancyApi.useFetchVacanciesQuery(params ? params : '')
 
-    useEffect(() => {
-        if (data) {
-            dispatch(setPaginationData(data))
-        }
-    }, [data, dispatch])
+    // useEffect(() => {
+    //     if (data) {
+    //         dispatch(setPaginationData(data))
+    //     }
+    // }, [data, dispatch])
 
     return (
         <TableContainer>
             <Table>
                 <TableHeader />
                 <tbody>
-                    {vacancies && vacancies.map(vacancy => <VTableRow key={vacancy.id} vacancy={vacancy} />)}
+                    {vacancies && vacancies.map(vacancy => <VTableRow key={vacancy._id} vacancy={vacancy} />)}
                 </tbody>
             </Table>
         </TableContainer>

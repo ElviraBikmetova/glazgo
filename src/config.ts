@@ -1,8 +1,8 @@
 
-export const VACANCY_STATUS: Record<number, string> = {
-  1: "Открыта",
-  2: "Закрыта",
-  3: "Приостановлена"
+export const VACANCY_STATUS: Record<string, string> = {
+  open: "Открыта",
+  suspend: "Закрыта",
+  close: "Приостановлена"
 }
 
 export const CANDIDATE_STATUS: Record<number, string> = {
@@ -16,30 +16,14 @@ export const CANDIDATE_STATUS: Record<number, string> = {
   8: "Кадровый резерв"
 }
 
-export const REGION: Record<number, string> = {
-  1: "Москва",
-  2: "Мурманск",
-  3: "Санкт-Петербург",
-  4: "Казань",
-  5: "Архангельск",
-  6: "Магадан",
-  7: "Калуга",
-  8: "Смоленск",
-  9: "Рязань",
-  10: "Ржев",
-  11: "Курск",
-  12: "Брянск",
-  13: "Уфа",
+export const SCHEDULE: Record<string, string> = {
+  '5/2': "5/2",
+  '3/2': "3/2",
+  '2/2': "2/2"
 }
 
-export const SCHEDULE: Record<number, string> = {
-  1: "5/2",
-  2: "2/2",
-  3: "3/3"
-}
-
-export const REASON: Record<number, string> = {
-  1: "Расширение штата",
-  2: "Увольнение сотрудника",
-  3: "Повышение сотрудника"
+export const REASON: Record<string, string> = {
+  expansion: "Расширение штата",
+  dismissal: "Увольнение сотрудника",
+  promotion: "Повышение сотрудника"
 }

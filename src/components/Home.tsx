@@ -9,21 +9,21 @@ import { Link } from 'react-router-dom'
 import authApi from '../services/AuthService'
 
 const Home = () => {
-  const [skip, setSkip] = useState(true)
-  const {data: users, refetch} = authApi.useGetUsersQuery(null, {skip})
+  // const [skip, setSkip] = useState(true)
+  // const {data: users, refetch} = authApi.useGetUsersQuery(null, {skip})
 
-  const getUsers = () => {
-    setSkip(false)
-    if (!skip) refetch()
-  }
+  // const getUsers = () => {
+  //   setSkip(false)
+  //   if (!skip) refetch()
+  // }
 
   return (
     <Wrapper>
       <SWelcome>
         <Welcome/>
       </SWelcome>
-      <button onClick={getUsers}>Получить пользователей</button>
-      {users && users.map((user) => <div key={user.email}>{user.email}</div>)}
+      {/* <button onClick={getUsers}>Получить пользователей</button>
+      {users && users.map((user) => <div key={user.email}>{user.email}</div>)} */}
       <Board>
         <Link to='/vacancies'>
           <BoardItem>

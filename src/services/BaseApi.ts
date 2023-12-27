@@ -60,6 +60,7 @@ const baseQueryWithReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions)
     }
   }
+  // throw result.error
   return result
 }
 
